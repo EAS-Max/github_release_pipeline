@@ -9,7 +9,11 @@ var token = argv.token;
 var org = argv.org;
 var repo = argv.repo;
 var tag = argv.tag;
-var pathToBody = argv.pathToBody;
+// var pathToBody = argv.tag;
+var Body = require('../testBody.json');
+
+// const input = document.getElementById(pathToBody);
+
 // Example of setting flags: node src/index.js --token=abc123 --org=myorg --repo=myrepo --tag=v1.0.0
 
 function main() {
@@ -35,7 +39,7 @@ function getByTag() {
     // console.log(req, '--------')
 
 }
-getByTag()
+// getByTag()
 
 
 async function post1() {
@@ -49,10 +53,29 @@ async function post1() {
         tag_name: 'v21.0.0',
         target_commitish: 'master',
         name: 'v12.0.0',
-        body: 'Description of the release post rquest 1',
+        body: 'JSON.stringify(path.)',
         draft: false,
         prerelease: false,
         generate_release_notes: false
     })
 }
-post1()
+
+// post1()
+async function postAuto() {
+    const octokit = new Octokit({
+        auth: `${token}`
+    })
+
+    await octokit.request(`POST /repos/${org}/${repo}/releases`, {
+        owner: `${org}`,
+        repo: `${repo}`,
+        tag_name: `${Body.tag_name}`,
+        target_commitish: `${Body.target_commitish}`,
+        name: `${Body.name}`,
+        body: `${Body.body}`,
+        draft: Body.draft,
+        prerelease: Body.prerelease,
+        generate_release_notes: Body.generate_release_notes
+    })
+}
+postAuto()
