@@ -9,7 +9,7 @@ var token = argv.token;
 var org = argv.org;
 var repo = argv.repo;
 var tag = argv.tag;
-// var pathToBody = argv.tag;
+var relId = argv.relId
 var Body = require('../testBody.json');
 
 // const input = document.getElementById(pathToBody);
@@ -29,11 +29,12 @@ function main() {
 // main()
 
 function getByTag() {
-    var req = fetch(`https://api.github.com/repos/${org}/${repo}/releases/tags/${tag}`, { method: 'GET', headers: { Authentication: `bearer ${token}`, body: pathToBody } })
+    var req = fetch(`https://api.github.com/repos/${org}/${repo}/releases/tags/${tag}`, { method: 'GET', headers: { Authentication: `bearer ${token}` } })
         .then(response => response.json())
         .then(jsonResponse => {
             test = jsonResponse;
-            console.log(test.body);
+            console.log(test)
+            console.log(test.body, '----------------------');
             return test;
         });
     // console.log(req, '--------')
@@ -42,29 +43,29 @@ function getByTag() {
 // getByTag()
 
 
-async function post1() {
-    const octokit = new Octokit({
-        auth: `${token}`
-    })
+// async function post1() {
+//     const octokit = new Octokit({
+//         auth: `${token}`
+//     })
 
-    await octokit.request(`POST /repos/${org}/${repo}/releases`, {
-        owner: `${org}`,
-        repo: `${repo}`,
-        tag_name: 'v21.0.0',
-        target_commitish: 'master',
-        name: 'v12.0.0',
-        body: 'JSON.stringify(path.)',
-        draft: false,
-        prerelease: false,
-        generate_release_notes: false
-    })
-}
+//     await octokit.request(`POST /repos/${org}/${repo}/releases`, {
+//         owner: `${org}`,
+//         repo: `${repo}`,
+//         tag_name: 'v21.0.0',
+//         target_commitish: 'master',
+//         name: 'v12.0.0',
+//         body: 'JSON.stringify(path.)',
+//         draft: false,
+//         prerelease: false,
+//         generate_release_notes: false
+//     })
+// }
 
 // post1()
+const octokit = new Octokit({
+    auth: `${token}`
+})
 async function postAuto() {
-    const octokit = new Octokit({
-        auth: `${token}`
-    })
 
     await octokit.request(`POST /repos/${org}/${repo}/releases`, {
         owner: `${org}`,
@@ -78,4 +79,19 @@ async function postAuto() {
         generate_release_notes: Body.generate_release_notes
     })
 }
-postAuto()
+// postAuto()
+
+async function patchRelease() {
+    await octokit.request(`PATCH /repos/${org}/${repo}/releases`, {
+        owner: `${org}`,
+        repo: `${repo}`,
+        release_id: `${relId}`,
+        tag_name: `${Body.tag_name}`,
+        target_commitish: `${Body.target_commitish}`,
+        name: `${Body.name}`,
+        body: `${Body.body}`,
+        draft: Body.draft,
+        prerelease: Body.prerelease
+    })
+}
+patchRelease()
