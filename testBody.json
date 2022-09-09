@@ -2,7 +2,7 @@
     "tag_name": "testjsonbody2",
     "target_commitish": "master",
     "name": "7.0.0",
-    "body": "json file body via command line",
+    "body": "json file body via command line PATCH",
    "draft": false,
     "prerelease": false,
     "generate_release_notes": false

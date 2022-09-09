@@ -2,31 +2,18 @@
 
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const { Octokit } = require("@octokit/core");
-
-
+var Body = require('../testBody.json');
 var argv = require('minimist')(process.argv.slice(2));
+
+
 var token = argv.token;
 var org = argv.org;
 var repo = argv.repo;
 var tag = argv.tag;
 var relId = argv.relId
-var Body = require('../testBody.json');
+var method = argv.method
 
-// const input = document.getElementById(pathToBody);
-
-// Example of setting flags: node src/index.js --token=abc123 --org=myorg --repo=myrepo --tag=v1.0.0
-
-function main() {
-
-    const url = getByTag.url;
-    const method = getByTag.method;
-    const credentials = getByTag.credentials;
-    const bodyUsed = getByTag.bodyUsed;
-
-    var potsReq = new fetch(`https://api.github.com/repos/${org}/${repo}/releases`, { method: 'POST', body: '', headers: { Authentication: `bearer ${token}` } })
-};
-
-// main()
+// Example command: node src/index.js --token={token} --org={org} --repo={repo} --tag={tag} --method={method}
 
 function getByTag() {
     var req = fetch(`https://api.github.com/repos/${org}/${repo}/releases/tags/${tag}`, { method: 'GET', headers: { Authentication: `bearer ${token}` } })
@@ -37,34 +24,15 @@ function getByTag() {
             console.log(test.body, '----------------------');
             return test;
         });
-    // console.log(req, '--------')
 
 }
-// getByTag()
 
-
-// async function post1() {
-//     const octokit = new Octokit({
-//         auth: `${token}`
-//     })
-
-//     await octokit.request(`POST /repos/${org}/${repo}/releases`, {
-//         owner: `${org}`,
-//         repo: `${repo}`,
-//         tag_name: 'v21.0.0',
-//         target_commitish: 'master',
-//         name: 'v12.0.0',
-//         body: 'JSON.stringify(path.)',
-//         draft: false,
-//         prerelease: false,
-//         generate_release_notes: false
-//     })
-// }
-
-// post1()
 const octokit = new Octokit({
     auth: `${token}`
 })
+
+// Example command: node src/index.js --token={token} --org={org} --repo={repo} --method={method}
+// The body you want must be in the json file
 async function postAuto() {
 
     await octokit.request(`POST /repos/${org}/${repo}/releases`, {
@@ -79,10 +47,10 @@ async function postAuto() {
         generate_release_notes: Body.generate_release_notes
     })
 }
-// postAuto()
 
+// Example command: node src/index.js --token={token} --org={org} --repo={repo}  --relId={repo_Id} --method={method}
 async function patchRelease() {
-    await octokit.request(`PATCH /repos/${org}/${repo}/releases`, {
+    await octokit.request(`PATCH /repos/${org}/${repo}/releases/${relId}`, {
         owner: `${org}`,
         repo: `${repo}`,
         release_id: `${relId}`,
@@ -94,4 +62,13 @@ async function patchRelease() {
         prerelease: Body.prerelease
     })
 }
-patchRelease()
+
+if (method === "GET") {
+    getByTag()
+} else if (method === "PATCH") {
+    patchRelease()
+} else if (method === "POST") {
+    postAuto()
+} else {
+    console.log('method is undefined or incorrect, please use the --method= flag to chose one of the following options: GET, POST, PATCH')
+}
