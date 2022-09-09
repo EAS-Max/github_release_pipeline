@@ -62,13 +62,19 @@ async function patchRelease() {
         prerelease: Body.prerelease
     })
 }
-
-if (method === "GET") {
-    getByTag()
-} else if (method === "PATCH") {
-    patchRelease()
-} else if (method === "POST") {
-    postAuto()
-} else {
-    console.log('method is undefined or incorrect, please use the --method= flag to chose one of the following options: GET, POST, PATCH')
+function main() {
+    try {
+        if (method === "GET") {
+            getByTag()
+        } else if (method === "PATCH") {
+            patchRelease()
+        } else if (method === "POST") {
+            postAuto()
+        } else {
+            console.log('method is undefined or incorrect, please use the --method= flag to chose one of the following options: GET, POST, PATCH')
+        }
+    } catch (err) {
+        console(err.message)
+    }
 }
+main()
