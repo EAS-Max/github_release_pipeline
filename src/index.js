@@ -13,7 +13,7 @@ var tag = argv.tag;
 var relId = argv.relId
 var method = argv.method
 
-// Example command: node src/index.js --token={token} --org={org} --repo={repo} --tag={tag} --method={method}
+// Example command: node src/index.js --token={token} --org={org} --repo={repo} --tag={tag} --method=GET
 
 function getByTag() {
     var req = fetch(`https://api.github.com/repos/${org}/${repo}/releases/tags/${tag}`, { method: 'GET', headers: { Authentication: `bearer ${token}` } })
@@ -31,7 +31,7 @@ const octokit = new Octokit({
     auth: `${token}`
 })
 
-// Example command: node src/index.js --token={token} --org={org} --repo={repo} --method={method}
+// Example command: node src/index.js --token={token} --org={org} --repo={repo} --method=POST
 // The body you want must be in the json file
 async function postAuto() {
 
@@ -48,7 +48,7 @@ async function postAuto() {
     })
 }
 
-// Example command: node src/index.js --token={token} --org={org} --repo={repo}  --relId={repo_Id} --method={method}
+// Example command: node src/index.js --token={token} --org={org} --repo={repo}  --relId={repo_Id} --method=PATCH
 async function patchRelease() {
     await octokit.request(`PATCH /repos/${org}/${repo}/releases/${relId}`, {
         owner: `${org}`,
