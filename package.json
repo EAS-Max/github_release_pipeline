@@ -1,0 +1,25 @@
+{
+  "name": "github_release_pipeline",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EAS-Max/github_release_pipeline.git"
+  },
+  "author": "EAS-Max",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EAS-Max/github_release_pipeline/issues"
+  },
+  "homepage": "https://github.com/EAS-Max/github_release_pipeline#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "node-fetch": "^3.2.10"
+  }
+}
